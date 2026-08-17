@@ -1,6 +1,9 @@
 import warnings
 warnings.filterwarnings('ignore')
 
+import logging
+logging.getLogger('easyocr').setLevel(logging.ERROR)
+
 import easyocr
 import numpy as np
 from PIL import Image
@@ -15,12 +18,11 @@ def read_stat_column(reader, cropped_img):
     return '0'
 
 def extract_valorant_scoreboard(image_path):
-    # Load original image
     img = Image.open(image_path)
     width, height = img.size
 
-    # Initialize EasyOCR reader
-    reader = easyocr.Reader(['en'], gpu=True)
+    # Initialize EasyOCR reader with verbose=False to suppress warning messages
+    reader = easyocr.Reader(['en'], gpu=True, verbose=False)
 
     # --- 1. CROP & EXTRACT MATCH HEADER & RESULT (IN-MEMORY) ---
     match_header_box = (int(width * 0.35), int(height * 0.06), int(width * 0.65), int(height * 0.16))
